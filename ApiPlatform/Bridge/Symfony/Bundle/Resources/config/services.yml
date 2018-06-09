@@ -1,0 +1,84 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Ez\ApiPlatform\Repository\DataProvider\LocationItemDataProvider:
+        tags:
+            - {name: 'api_platform.item_data_provider', priority: 2}
+
+    Ez\ApiPlatform\Repository\DataProvider\LocationCollectionDataProvider:
+        class: Ez\ApiPlatform\Repository\DataProvider\SearchCollectionDataProvider
+        tags:
+            - {name: 'api_platform.collection_data_provider', priority: 2}
+        arguments:
+            $queryClass: 'eZ\Publish\API\Repository\Values\Content\LocationQuery'
+            $searchMethod: 'findLocations'
+            $resourceClass: 'eZ\Publish\Core\Repository\Values\Content\Location'
+            $filters:
+                - '@Ez\ApiPlatform\Repository\Filter\ContentTypeIdentifier'
+                - '@Ez\ApiPlatform\Repository\Filter\ParentLocationId'
+                - '@Ez\ApiPlatform\Repository\Filter\SectionId'
+
+    Ez\ApiPlatform\Repository\DataProvider\ContentCollectionDataProvider:
+        class: Ez\ApiPlatform\Repository\DataProvider\SearchCollectionDataProvider
+        tags:
+            - {name: 'api_platform.collection_data_provider', priority: 2}
+        arguments:
+            $resourceClass: 'eZ\Publish\Core\Repository\Values\Content\Content'
+            $queryClass: 'eZ\Publish\API\Repository\Values\Content\Query'
+            $searchMethod: 'findContent'
+            $filters:
+                - '@Ez\ApiPlatform\Repository\Filter\ContentTypeIdentifier'
+                - '@Ez\ApiPlatform\Repository\Filter\ParentLocationId'
+                - '@Ez\ApiPlatform\Repository\Filter\SectionId'
+
+    Ez\ApiPlatform\Repository\DataProvider\ContentInfoCollectionDataProvider:
+        class: Ez\ApiPlatform\Repository\DataProvider\SearchCollectionDataProvider
+        tags:
+            - {name: 'api_platform.collection_data_provider', priority: 2}
+        arguments:
+            $resourceClass: 'eZ\Publish\API\Repository\Values\Content\ContentInfo'
+            $queryClass: 'eZ\Publish\API\Repository\Values\Content\Query'
+            $searchMethod: 'findContentInfo'
+            $filters:
+                - '@Ez\ApiPlatform\Repository\Filter\ContentTypeIdentifier'
+                - '@Ez\ApiPlatform\Repository\Filter\ParentLocationId'
+                - '@Ez\ApiPlatform\Repository\Filter\SectionId'
+
+    Ez\ApiPlatform\Repository\Filter\ParentLocationId:
+        class: Ez\ApiPlatform\Repository\Filter\CriterionFilter
+        arguments:
+            $criterionClass: 'eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId'
+
+    Ez\ApiPlatform\Repository\Filter\ContentTypeIdentifier:
+        class: Ez\ApiPlatform\Repository\Filter\CriterionFilter
+        arguments:
+            $criterionClass: 'eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeIdentifier'
+
+    Ez\ApiPlatform\Repository\Filter\SectionId:
+        class: Ez\ApiPlatform\Repository\Filter\CriterionFilter
+        arguments:
+            $criterionClass: 'eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId'
+
+    Ez\ApiPlatform\Repository\DataProvider\ContentInfoItemDataProvider:
+        tags:
+            - {name: 'api_platform.item_data_provider', priority: 2}
+
+    Ez\ApiPlatform\Serializer\Normalizer\ValueObjectNormalizer:
+        decorates: api_platform.serializer.normalizer.item
+        arguments: ['@Ez\ApiPlatform\Serializer\Normalizer\ValueObjectNormalizer.inner']
+        decoration_priority: 30
+
+    Ez\ApiPlatform\Serializer\Normalizer\ValueObjectNormalizer\JsonLd:
+        class: Ez\ApiPlatform\Serializer\Normalizer\ValueObjectNormalizer
+        decorates: api_platform.jsonld.normalizer.item
+        arguments: ['@Ez\ApiPlatform\Serializer\Normalizer\ValueObjectNormalizer\JsonLd.inner']
+
+    Ez\ApiPlatform\Metadata\Property\Factory\ValueObjectsPropertyMetadataFactory:
+        decorates: api_platform.metadata.property.metadata_factory
+        decoration_priority: 0
+        public: false
+        arguments:
+            - '@Ez\ApiPlatform\Metadata\Property\Factory\ValueObjectsPropertyMetadataFactory.inner'

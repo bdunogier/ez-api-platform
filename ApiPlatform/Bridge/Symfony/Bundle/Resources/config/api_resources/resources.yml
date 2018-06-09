@@ -1,0 +1,58 @@
+eZ\Publish\Core\Repository\Values\Content\Location:
+    itemOperations:
+        get:
+            path: "/content/locations/{id}"
+            method: "GET"
+            reqirements:
+                id: "[0-9]+"
+    collectionOperations:
+        get:
+            path: "/content/locations"
+            method: "GET"
+
+    properties:
+        id:
+            identifier: true
+#        contentInfo:
+#            subresource:
+#                resourceClass: eZ\Publish\API\Repository\Values\Content\ContentInfo
+#                collection: false
+
+eZ\Publish\API\Repository\Values\Content\ContentInfo:
+    itemOperations:
+        get:
+            path: "/content/{id}/info"
+            method: "GET"
+    collectionOperations:
+        get:
+            path: "/content/info"
+            method: "GET"
+    properties:
+        id:
+            identifier: true
+
+eZ\Publish\Core\Repository\Values\Content\Content:
+    itemOperations:
+        get:
+            path: "/content/{id}"
+            method: "GET"
+    collectionOperations:
+        get:
+            path: "/content"
+            method: "GET"
+    properties:
+        id:
+            identifier: true
+
+eZ\Publish\API\Repository\Values\Content\Section:
+    itemOperatons:
+        get:
+            path: "/sections/{id}"
+            method: "GET"
+    collectionOperations:
+        get:
+            path: "/sections"
+            method: "GET"
+    properties:
+        id:
+            identifier: true

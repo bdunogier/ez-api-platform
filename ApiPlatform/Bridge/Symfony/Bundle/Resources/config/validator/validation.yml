@@ -1,0 +1,5 @@
+eZ\Publish\Core\Repository\Values\Content\Location:
+    properties:
+        contentInfo:
+            -
+            - Type: 'eZ\Publish\API\Repository\Values\Content\ContentInfo'
